@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Controller, Query, Get } from '@nestjs/common';
-import { map } from 'rxjs';
+import { catchError, map } from 'rxjs';
 
 @Controller('api')
 export class TripController {
@@ -17,7 +17,11 @@ export class TripController {
             trip.description.includes(query.keyword) ||
             trip.tags.includes(query.keyword),
         );
+
         return fillterTrip;
+      }),
+      catchError((error) => {
+        return error;
       }),
     );
   }
